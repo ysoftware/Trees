@@ -51,42 +51,55 @@ public extension BinarySearchTree {
         let node = Node(element, key)
         count += 1
         
-        guard var nextNode = rootNode else {
+        let (_existingNode, _parentNode) = findNode(withKey: key)
+        
+        if let existingNode = _existingNode {
+            existingNode.value = element
+            return
+        }
+        
+        guard let parentNode = _parentNode else {
             rootNode = node
             return
         }
         
-        while true {
-            if nextNode.key == node.key {
-                nextNode.value = node.value
-                return
-            }
-            else if node.key < nextNode.key {
-                
-                guard let leftBranch = nextNode.leftBranch else {
-                    nextNode.leftBranch = node
-                    return
-                }
-                nextNode = leftBranch
-            }
-            else { //  node.key > nextNode.key
-                
-                guard let rightBranch = nextNode.rightBranch else {
-                    nextNode.rightBranch = node
-                    return
-                }
-                nextNode = rightBranch
-            }
+        if parentNode.key < key {
+            parentNode.rightBranch = node
+        }
+        else {
+            parentNode.leftBranch = node
         }
     }
     
-    func search(key: Int) -> Element? {
-        guard let parentNode = getParentOfNode(withKey: key) else { return nil }
-        let node = parentNode.leftBranch?.key == key ? parentNode.leftBranch : parentNode.rightBranch
-        return node?.value
+    func find(key: Int) -> Element? {
+        findNode(withKey: key).node?.value
     }
     
-    fileprivate func getParentOfNode(withKey key: Int) -> Node? {
-        return nil
+    fileprivate func findNode(withKey key: Int) -> (node: Node?, parent: Node?) {
+        
+        if rootNode == nil {
+            return (nil, nil)
+        }
+        
+        var nextNode = rootNode
+        var parentNode: Node?
+        
+        while let _nextNode = nextNode {
+            
+            if _nextNode.key == key {
+                return (nextNode, parentNode)
+            }
+            
+            parentNode = nextNode
+            
+            if _nextNode.key > key {
+                nextNode = _nextNode.leftBranch
+            }
+            else { //  nextNode.key < key
+                nextNode = _nextNode.rightBranch
+            }
+        }
+        
+        return (nextNode, parentNode)
     }
 }

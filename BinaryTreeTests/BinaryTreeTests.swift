@@ -11,6 +11,30 @@ import BinaryTree
 
 class BinaryTreeTests: XCTestCase {
     
+    func simpleTree() -> BinarySearchTree<Int> {
+        //        5
+        //       / \
+        //      3   6
+        //     /     \
+        //    2       8
+        //   /       / \
+        //  1       7   9
+        
+        let tree = BinarySearchTree<Int>()
+        tree.add(5, key: 5)
+        tree.add(3, key: 3)
+        tree.add(6, key: 6)
+        tree.add(8, key: 8)
+        tree.add(9, key: 9)
+        tree.add(2, key: 2)
+        tree.add(1, key: 1)
+        tree.add(7, key: 7)
+        return tree
+    }
+    
+    
+    // MARK: - Tests
+    
     func testAddNodeOrdered() {
         
         let tree = BinarySearchTree<Int>()
@@ -46,24 +70,7 @@ class BinaryTreeTests: XCTestCase {
     }
     
     func testAddRandomOrder() {
-        
-        //        5
-        //       / \
-        //      3   6
-        //     /     \
-        //    2       8
-        //   /       / \
-        //  1       7   9
-        
-        let tree = BinarySearchTree<Int>()
-        tree.add(5, key: 5)
-        tree.add(3, key: 3)
-        tree.add(6, key: 6)
-        tree.add(8, key: 8)
-        tree.add(9, key: 9)
-        tree.add(2, key: 2)
-        tree.add(1, key: 1)
-        tree.add(7, key: 7)
+        let tree = simpleTree()
         
         XCTAssertEqual(8, tree.count)
         XCTAssertEqual(tree.rootNode?.value, 5)
@@ -74,5 +81,15 @@ class BinaryTreeTests: XCTestCase {
         XCTAssertEqual(tree.rootNode?.rightBranch?.rightBranch?.value, 8)
         XCTAssertEqual(tree.rootNode?.rightBranch?.rightBranch?.leftBranch?.value, 7)
         XCTAssertEqual(tree.rootNode?.rightBranch?.rightBranch?.rightBranch?.value, 9)
+    }
+    
+    func testFind() {
+        let tree = simpleTree()
+        
+        XCTAssertEqual(5, tree.find(key: 5))
+        XCTAssertEqual(8, tree.find(key: 8))
+        XCTAssertEqual(2, tree.find(key: 2))
+        XCTAssertEqual(7, tree.find(key: 7))
+        XCTAssertEqual(9, tree.find(key: 9))
     }
 }
