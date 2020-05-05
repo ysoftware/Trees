@@ -49,6 +49,7 @@ public extension BinarySearchTree {
     
     func add(_ element: Element, key: Int) {
         let node = Node(element, key)
+        count += 1
         
         guard var nextNode = rootNode else {
             rootNode = node
@@ -58,6 +59,7 @@ public extension BinarySearchTree {
         while true {
             if nextNode.key == node.key {
                 nextNode.value = node.value
+                return
             }
             else if node.key < nextNode.key {
                 
@@ -76,5 +78,15 @@ public extension BinarySearchTree {
                 nextNode = rightBranch
             }
         }
+    }
+    
+    func search(key: Int) -> Element? {
+        guard let parentNode = getParentOfNode(withKey: key) else { return nil }
+        let node = parentNode.leftBranch?.key == key ? parentNode.leftBranch : parentNode.rightBranch
+        return node?.value
+    }
+    
+    fileprivate func getParentOfNode(withKey key: Int) -> Node? {
+        return nil
     }
 }
